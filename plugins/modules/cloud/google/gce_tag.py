@@ -158,6 +158,7 @@ def main():
             zone=dict(type='str', default='us-central1-a'),
             service_account_email=dict(type='str'),
             pem_file=dict(type='path'),
+            credentials_file=dict(type='path'),
             project_id=dict(type='str'),
         ),
         mutually_exclusive=[
