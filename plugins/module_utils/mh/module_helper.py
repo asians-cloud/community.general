@@ -1,30 +1,29 @@
 # -*- coding: utf-8 -*-
 # (c) 2020, Alexei Znamensky <russoz@gmail.com>
-# Copyright: (c) 2020, Ansible Project
-# Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
+# Copyright (c) 2020, Ansible Project
+# Simplified BSD License (see LICENSES/BSD-2-Clause.txt or https://opensource.org/licenses/BSD-2-Clause)
+# SPDX-License-Identifier: BSD-2-Clause
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
+
 from ansible.module_utils.common.dict_transformations import dict_merge
 
-from ansible_collections.community.general.plugins.module_utils.mh.base import ModuleHelperBase, AnsibleModule
-from ansible_collections.community.general.plugins.module_utils.mh.mixins.cmd import CmdMixin
+# (TODO: remove AnsibleModule!) pylint: disable-next=unused-import
+from ansible_collections.community.general.plugins.module_utils.mh.base import ModuleHelperBase, AnsibleModule  # noqa: F401
 from ansible_collections.community.general.plugins.module_utils.mh.mixins.state import StateMixin
 from ansible_collections.community.general.plugins.module_utils.mh.mixins.deps import DependencyMixin
-from ansible_collections.community.general.plugins.module_utils.mh.mixins.vars import VarsMixin, VarDict as _VD
+from ansible_collections.community.general.plugins.module_utils.mh.mixins.vars import VarsMixin
 from ansible_collections.community.general.plugins.module_utils.mh.mixins.deprecate_attrs import DeprecateAttrsMixin
 
 
 class ModuleHelper(DeprecateAttrsMixin, VarsMixin, DependencyMixin, ModuleHelperBase):
-    _output_conflict_list = ('msg', 'exception', 'output', 'vars', 'changed')
     facts_name = None
     output_params = ()
     diff_params = ()
     change_params = ()
     facts_params = ()
-
-    VarDict = _VD  # for backward compatibility, will be deprecated at some point
 
     def __init__(self, module=None):
         super(ModuleHelper, self).__init__(module)
@@ -36,15 +35,6 @@ class ModuleHelper(DeprecateAttrsMixin, VarsMixin, DependencyMixin, ModuleHelper
                 change=None if not self.change_params else name in self.change_params,
                 fact=name in self.facts_params,
             )
-
-        self._deprecate_attr(
-            attr="VarDict",
-            msg="ModuleHelper.VarDict attribute is deprecated, use VarDict from "
-                "the ansible_collections.community.general.plugins.module_utils.mh.mixins.vars module instead",
-            version="6.0.0",
-            collection_name="community.general",
-            target=ModuleHelper,
-            module=self.module)
 
     def update_output(self, **kwargs):
         self.update_vars(meta={"output": True}, **kwargs)
@@ -65,25 +55,13 @@ class ModuleHelper(DeprecateAttrsMixin, VarsMixin, DependencyMixin, ModuleHelper
             facts = self.vars.facts()
             if facts is not None:
                 result['ansible_facts'] = {self.facts_name: facts}
-        if self.module._diff:
+        if self.diff_mode:
             diff = result.get('diff', {})
             vars_diff = self.vars.diff() or {}
             result['diff'] = dict_merge(dict(diff), vars_diff)
 
-        for varname in result:
-            if varname in self._output_conflict_list:
-                result["_" + varname] = result[varname]
-                del result[varname]
         return result
 
 
 class StateModuleHelper(StateMixin, ModuleHelper):
-    pass
-
-
-class CmdModuleHelper(CmdMixin, ModuleHelper):
-    pass
-
-
-class CmdStateModuleHelper(CmdMixin, StateMixin, ModuleHelper):
     pass

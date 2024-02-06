@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # (c) 2020, Alexei Znamensky <russoz@gmail.com>
-# Copyright: (c) 2020, Ansible Project
-# Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
+# Copyright (c) 2020, Ansible Project
+# Simplified BSD License (see LICENSES/BSD-2-Clause.txt or https://opensource.org/licenses/BSD-2-Clause)
+# SPDX-License-Identifier: BSD-2-Clause
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -10,6 +11,13 @@ import copy
 
 
 class VarMeta(object):
+    """
+    DEPRECATION WARNING
+
+    This class is deprecated and will be removed in community.general 10.0.0
+    Modules should use the VarDict from plugins/module_utils/vardict.py instead.
+    """
+
     NOTHING = object()
 
     def __init__(self, diff=False, output=True, change=None, fact=False):
@@ -59,6 +67,12 @@ class VarMeta(object):
 
 
 class VarDict(object):
+    """
+    DEPRECATION WARNING
+
+    This class is deprecated and will be removed in community.general 10.0.0
+    Modules should use the VarDict from plugins/module_utils/vardict.py instead.
+    """
     def __init__(self):
         self._data = dict()
         self._meta = dict()
@@ -122,7 +136,12 @@ class VarDict(object):
 
 
 class VarsMixin(object):
+    """
+    DEPRECATION WARNING
 
+    This class is deprecated and will be removed in community.general 10.0.0
+    Modules should use the VarDict from plugins/module_utils/vardict.py instead.
+    """
     def __init__(self, module=None):
         self.vars = VarDict()
         super(VarsMixin, self).__init__(module)

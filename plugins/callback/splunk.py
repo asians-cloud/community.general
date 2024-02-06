@@ -1,45 +1,34 @@
 # -*- coding: utf-8 -*-
-# This file is part of Ansible
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
+# Copyright (c) Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 DOCUMENTATION = '''
     name: splunk
-    type: aggregate
+    type: notification
     short_description: Sends task result events to Splunk HTTP Event Collector
     author: "Stuart Hirst (!UNKNOWN) <support@convergingdata.com>"
     description:
       - This callback plugin will send task results as JSON formatted events to a Splunk HTTP collector.
-      - The companion Splunk Monitoring & Diagnostics App is available here "https://splunkbase.splunk.com/app/4023/"
+      - The companion Splunk Monitoring & Diagnostics App is available here U(https://splunkbase.splunk.com/app/4023/).
       - Credit to "Ryan Currah (@ryancurrah)" for original source upon which this is based.
     requirements:
       - Whitelisting this callback plugin
       - 'Create a HTTP Event Collector in Splunk'
-      - 'Define the url and token in ansible.cfg'
+      - 'Define the URL and token in C(ansible.cfg)'
     options:
       url:
-        description: URL to the Splunk HTTP collector source
+        description: URL to the Splunk HTTP collector source.
         env:
           - name: SPLUNK_URL
         ini:
           - section: callback_splunk
             key: url
       authtoken:
-        description: Token to authenticate the connection to the Splunk HTTP collector
+        description: Token to authenticate the connection to the Splunk HTTP collector.
         env:
           - name: SPLUNK_AUTHTOKEN
         ini:
@@ -47,8 +36,8 @@ DOCUMENTATION = '''
             key: authtoken
       validate_certs:
         description: Whether to validate certificates for connections to HEC. It is not recommended to set to
-                     C(false) except when you are sure that nobody can intercept the connection
-                     between this plugin and HEC, as setting it to C(false) allows man-in-the-middle attacks!
+                     V(false) except when you are sure that nobody can intercept the connection
+                     between this plugin and HEC, as setting it to V(false) allows man-in-the-middle attacks!
         env:
           - name: SPLUNK_VALIDATE_CERTS
         ini:
@@ -59,7 +48,7 @@ DOCUMENTATION = '''
         version_added: '1.0.0'
       include_milliseconds:
         description: Whether to include milliseconds as part of the generated timestamp field in the event
-                     sent to the Splunk HTTP collector
+                     sent to the Splunk HTTP collector.
         env:
           - name: SPLUNK_INCLUDE_MILLISECONDS
         ini:
@@ -176,7 +165,7 @@ class SplunkHTTPCollectorSource(object):
 
 class CallbackModule(CallbackBase):
     CALLBACK_VERSION = 2.0
-    CALLBACK_TYPE = 'aggregate'
+    CALLBACK_TYPE = 'notification'
     CALLBACK_NAME = 'community.general.splunk'
     CALLBACK_NEEDS_WHITELIST = True
 

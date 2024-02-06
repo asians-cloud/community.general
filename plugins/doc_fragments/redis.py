@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Andreas Botzner <andreas at botzner dot com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2021, Andreas Botzner <andreas at botzner dot com>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -45,8 +46,8 @@ options:
     default: true
   ca_certs:
     description:
-      - Path to root certificates file. If not set and I(tls) is
-        set to C(true), certifi ca-certificates will be used.
+      - Path to root certificates file. If not set and O(tls) is
+        set to V(true), certifi ca-certificates will be used.
     type: str
 requirements: [ "redis", "certifi" ]
 

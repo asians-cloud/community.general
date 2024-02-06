@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-# (c) 2018, Ivan Aragones Muniesa <ivan.aragones.muniesa@gmail.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2018, Ivan Aragones Muniesa <ivan.aragones.muniesa@gmail.com>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 '''
     Counter enabled Ansible callback plugin (See DOCUMENTATION for more information)
 '''
@@ -20,13 +21,12 @@ DOCUMENTATION = '''
     extends_documentation_fragment:
       - default_callback
     requirements:
-      - set as stdout callback in ansible.cfg  (stdout_callback = counter_enabled)
+      - set as stdout callback in C(ansible.cfg) (C(stdout_callback = counter_enabled))
 '''
 
 from ansible import constants as C
 from ansible.plugins.callback import CallbackBase
 from ansible.utils.color import colorize, hostcolor
-from ansible.template import Templar
 from ansible.playbook.task_include import TaskInclude
 
 

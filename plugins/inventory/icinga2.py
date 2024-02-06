@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2021, Cliff Hults <cliff.hlts@gmail.com>
 # Copyright (c) 2021 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
@@ -57,7 +58,7 @@ DOCUMENTATION = '''
         description:
           - Allows the override of the inventory name based on different attributes.
           - This allows for changing the way limits are used.
-          - The current default, C(address), is sometimes not unique or present. We recommend to use C(name) instead.
+          - The current default, V(address), is sometimes not unique or present. We recommend to use V(name) instead.
         type: string
         default: address
         choices: ['name', 'display_name', 'address']
@@ -71,7 +72,7 @@ url: http://localhost:5665
 user: ansible
 password: secure
 host_filter: \"linux-servers\" in host.groups
-validate_certs: false
+validate_certs: false  # only do this when connecting to localhost!
 inventory_attr: name
 groups:
   # simple name matching

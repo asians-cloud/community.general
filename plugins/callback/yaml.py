@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-# (c) 2017 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2017 Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 # Make coding more python3-ish
 from __future__ import (absolute_import, division, print_function)
@@ -10,7 +11,7 @@ DOCUMENTATION = '''
     author: Unknown (!UNKNOWN)
     name: yaml
     type: stdout
-    short_description: yaml-ized Ansible screen output
+    short_description: YAML-ized Ansible screen output
     description:
         - Ansible output that can be quite a bit easier to read than the
           default JSON formatting.
@@ -24,12 +25,10 @@ import yaml
 import json
 import re
 import string
-import sys
 
-from ansible.module_utils.common.text.converters import to_bytes, to_text
-from ansible.module_utils.six import string_types
+from ansible.module_utils.common.text.converters import to_text
 from ansible.parsing.yaml.dumper import AnsibleDumper
-from ansible.plugins.callback import CallbackBase, strip_internal_keys, module_response_deepcopy
+from ansible.plugins.callback import strip_internal_keys, module_response_deepcopy
 from ansible.plugins.callback.default import CallbackModule as Default
 
 

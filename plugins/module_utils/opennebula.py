@@ -2,7 +2,8 @@
 #
 # Copyright 2018 www.privaz.io Valletech AB
 #
-# Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
+# Simplified BSD License (see LICENSES/BSD-2-Clause.txt or https://opensource.org/licenses/BSD-2-Clause)
+# SPDX-License-Identifier: BSD-2-Clause
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -23,6 +24,41 @@ try:
 except ImportError:
     OneException = Exception
     HAS_PYONE = False
+
+
+# A helper function to mitigate https://github.com/OpenNebula/one/issues/6064.
+# It allows for easily handling lists like "NIC" or "DISK" in the JSON-like template representation.
+# There are either lists of dictionaries (length > 1) or just dictionaries.
+def flatten(to_flatten, extract=False):
+    """Flattens nested lists (with optional value extraction)."""
+    def recurse(to_flatten):
+        return sum(map(recurse, to_flatten), []) if isinstance(to_flatten, list) else [to_flatten]
+    value = recurse(to_flatten)
+    if extract and len(value) == 1:
+        return value[0]
+    return value
+
+
+# A helper function to mitigate https://github.com/OpenNebula/one/issues/6064.
+# It renders JSON-like template representation into OpenNebula's template syntax (string).
+def render(to_render):
+    """Converts dictionary to OpenNebula template."""
+    def recurse(to_render):
+        for key, value in sorted(to_render.items()):
+            if value is None:
+                continue
+            if isinstance(value, dict):
+                yield '{0:}=[{1:}]'.format(key, ','.join(recurse(value)))
+                continue
+            if isinstance(value, list):
+                for item in value:
+                    yield '{0:}=[{1:}]'.format(key, ','.join(recurse(item)))
+                continue
+            if isinstance(value, str):
+                yield '{0:}="{1:}"'.format(key, value.replace('\\', '\\\\').replace('"', '\\"'))
+                continue
+            yield '{0:}="{1:}"'.format(key, value)
+    return '\n'.join(recurse(to_render))
 
 
 class OpenNebulaModule:
@@ -83,12 +119,12 @@ class OpenNebulaModule:
         if self.module.params.get("api_username"):
             username = self.module.params.get("api_username")
         else:
-            self.fail("Either api_username or the environment vairable ONE_USERNAME must be provided")
+            self.fail("Either api_username or the environment variable ONE_USERNAME must be provided")
 
         if self.module.params.get("api_password"):
             password = self.module.params.get("api_password")
         else:
-            self.fail("Either api_password or the environment vairable ONE_PASSWORD must be provided")
+            self.fail("Either api_password or the environment variable ONE_PASSWORD must be provided")
 
         session = "%s:%s" % (username, password)
 

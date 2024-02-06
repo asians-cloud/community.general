@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# (c) 2015, Steve Gargan <steve.gargan@gmail.com>
-# (c) 2017 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2015, Steve Gargan <steve.gargan@gmail.com>
+# Copyright (c) 2017 Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
@@ -20,10 +21,11 @@ DOCUMENTATION = '''
       _raw:
         description: List of key(s) to retrieve.
         type: list
+        elements: string
       recurse:
         type: boolean
         description: If true, will retrieve all the values that have the given key as prefix.
-        default: False
+        default: false
       index:
         description:
           - If the key has a value with the specified index then this is returned allowing access to historical values.
@@ -36,25 +38,22 @@ DOCUMENTATION = '''
         default: localhost
         description:
           - The target to connect to, must be a resolvable address.
-            Will be determined from C(ANSIBLE_CONSUL_URL) if that is set.
-          - "C(ANSIBLE_CONSUL_URL) should look like this: C(https://my.consul.server:8500)"
-        env:
-          - name: ANSIBLE_CONSUL_URL
+          - Will be determined from E(ANSIBLE_CONSUL_URL) if that is set.
         ini:
           - section: lookup_consul
             key: host
       port:
         description:
           - The port of the target host to connect to.
-          - If you use C(ANSIBLE_CONSUL_URL) this value will be used from there.
+          - If you use E(ANSIBLE_CONSUL_URL) this value will be used from there.
         default: 8500
       scheme:
         default: http
         description:
           - Whether to use http or https.
-          - If you use C(ANSIBLE_CONSUL_URL) this value will be used from there.
+          - If you use E(ANSIBLE_CONSUL_URL) this value will be used from there.
       validate_certs:
-        default: True
+        default: true
         description: Whether to verify the ssl connection or not.
         env:
           - name: ANSIBLE_CONSUL_VALIDATE_CERTS
@@ -69,7 +68,9 @@ DOCUMENTATION = '''
           - section: lookup_consul
             key: client_cert
       url:
-        description: "The target to connect to, should look like this: C(https://my.consul.server:8500)."
+        description:
+          - The target to connect to.
+          - "Should look like this: V(https://my.consul.server:8500)."
         type: str
         version_added: 1.0.0
         env:
@@ -103,7 +104,6 @@ RETURN = """
     type: dict
 """
 
-import os
 from ansible.module_utils.six.moves.urllib.parse import urlparse
 from ansible.errors import AnsibleError, AnsibleAssertionError
 from ansible.plugins.lookup import LookupBase

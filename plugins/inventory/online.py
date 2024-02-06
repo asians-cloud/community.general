@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2018 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -15,10 +16,10 @@ DOCUMENTATION = r'''
     options:
         plugin:
             description: token that ensures this is a source file for the 'online' plugin.
-            required: True
+            required: true
             choices: ['online', 'community.general.online']
         oauth_token:
-            required: True
+            required: true
             description: Online OAuth token.
             env:
                 # in order of precedence
@@ -28,6 +29,7 @@ DOCUMENTATION = r'''
         hostnames:
             description: List of preference about what to use as an hostname.
             type: list
+            elements: string
             default:
                 - public_ipv4
             choices:
@@ -37,6 +39,7 @@ DOCUMENTATION = r'''
         groups:
             description: List of groups.
             type: list
+            elements: string
             choices:
                 - location
                 - offer
@@ -62,7 +65,7 @@ from sys import version as python_version
 from ansible.errors import AnsibleError
 from ansible.module_utils.urls import open_url
 from ansible.plugins.inventory import BaseInventoryPlugin
-from ansible.module_utils.common.text.converters import to_native, to_text
+from ansible.module_utils.common.text.converters import to_text
 from ansible.module_utils.ansible_release import __version__ as ansible_version
 from ansible.module_utils.six.moves.urllib.parse import urljoin
 

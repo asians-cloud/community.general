@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# (c) 2012, Michael DeHaan, <michael.dehaan@gmail.com>
-# (c) 2017 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2012, Michael DeHaan, <michael.dehaan@gmail.com>
+# Copyright (c) 2017 Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 # Make coding more python3-ish
 from __future__ import (absolute_import, division, print_function)
@@ -13,12 +14,10 @@ DOCUMENTATION = '''
     type: notification
     requirements:
       - whitelisting in configuration
-      - the '/usr/bin/say' command line program (standard on macOS) or 'espeak' command line program
+      - the C(/usr/bin/say) command line program (standard on macOS) or C(espeak) command line program
     short_description: notify using software speech synthesizer
     description:
-      - This plugin will use the 'say' or 'espeak' program to "speak" about play events.
-    notes:
-      - In 2.8, this callback has been renamed from C(osx_say) into M(community.general.say).
+      - This plugin will use the C(say) or C(espeak) program to "speak" about play events.
 '''
 
 import platform

@@ -1,4 +1,8 @@
 ---
+# Copyright (c) Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 name: Documentation Report
 description: Ask us about docs
 # NOTE: issue body is enabled to allow screenshots
@@ -42,8 +46,8 @@ body:
   attributes:
     label: Component Name
     description: >-
-      Write the short name of the rst file, module, plugin, task or
-      feature below, *use your best guess if unsure*.
+      Write the short name of the file, module, plugin, task or feature below,
+      *use your best guess if unsure*. Do not include `community.general.`!
     placeholder: mysql_user
   validations:
     required: true

@@ -1,7 +1,12 @@
+---
 ####################################################################
 # WARNING: These are designed specifically for Ansible tests       #
 # and should not be used as examples of how to write Ansible roles #
 ####################################################################
+
+# Copyright (c) Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 - when:
     - not (ansible_os_family == 'Alpine' and ansible_distribution_version is version('3.15', '<'))  # TODO
@@ -32,8 +37,6 @@
       until: faketime_package_installed is success
     - name: Find libfaketime path
       shell: '{{ list_pkg_files }} {{ faketime_pkg }} | grep -F libfaketime.so.1'
-      args:
-        warn: false
       register: libfaketime_path
     - when: ansible_service_mgr == 'systemd'
       block:

@@ -1,4 +1,8 @@
 ---
+# Copyright (c) Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 name: Feature request
 description: Suggest an idea for this project
 
@@ -38,8 +42,8 @@ body:
   attributes:
     label: Component Name
     description: >-
-      Write the short name of the module, plugin, task or feature below,
-      *use your best guess if unsure*.
+      Write the short name of the module or plugin, or which other part(s) of the collection this feature affects.
+      *use your best guess if unsure*. Do not include `community.general.`!
     placeholder: dnf, apt, yum, pip, user etc.
   validations:
     required: true

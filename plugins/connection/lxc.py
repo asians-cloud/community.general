@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # (c) 2015, Joerg Thalheim <joerg@higgsboson.tk>
 # Copyright (c) 2017 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -18,6 +19,7 @@ DOCUMENTATION = '''
             - Container identifier
         default: inventory_hostname
         vars:
+            - name: inventory_hostname
             - name: ansible_host
             - name: ansible_lxc_host
       executable:
@@ -58,7 +60,7 @@ class Connection(ConnectionBase):
     def __init__(self, play_context, new_stdin, *args, **kwargs):
         super(Connection, self).__init__(play_context, new_stdin, *args, **kwargs)
 
-        self.container_name = self._play_context.remote_addr
+        self.container_name = None
         self.container = None
 
     def _connect(self):
@@ -66,11 +68,14 @@ class Connection(ConnectionBase):
         super(Connection, self)._connect()
 
         if not HAS_LIBLXC:
-            msg = "lxc bindings for python2 are not installed"
+            msg = "lxc python bindings are not installed"
             raise errors.AnsibleError(msg)
 
-        if self.container:
+        container_name = self.get_option('remote_addr')
+        if self.container and self.container_name == container_name:
             return
+
+        self.container_name = container_name
 
         self._display.vvv("THIS IS A LOCAL LXC DIR", host=self.container_name)
         self.container = _lxc.Container(self.container_name)
@@ -116,7 +121,7 @@ class Connection(ConnectionBase):
         super(Connection, self).exec_command(cmd, in_data=in_data, sudoable=sudoable)
 
         # python2-lxc needs bytes. python3-lxc needs text.
-        executable = to_native(self._play_context.executable, errors='surrogate_or_strict')
+        executable = to_native(self.get_option('executable'), errors='surrogate_or_strict')
         local_cmd = [executable, '-c', to_native(cmd, errors='surrogate_or_strict')]
 
         read_stdout, write_stdout = None, None

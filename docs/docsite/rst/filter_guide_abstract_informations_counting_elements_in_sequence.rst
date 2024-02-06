@@ -1,7 +1,12 @@
+..
+  Copyright (c) Ansible Project
+  GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+  SPDX-License-Identifier: GPL-3.0-or-later
+
 Counting elements in a sequence
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``community.general.counter`` filter plugin allows you to count (hashable) elements in a sequence. Elements are returned as dictionary keys and their counts are stored as dictionary values.
+The :ansplugin:`community.general.counter filter plugin <community.general.counter#filter>` allows you to count (hashable) elements in a sequence. Elements are returned as dictionary keys and their counts are stored as dictionary values.
 
 .. code-block:: yaml+jinja
 

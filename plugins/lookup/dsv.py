@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-# Copyright: (c) 2020, Adam Migus <adam@migus.org>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2020, Adam Migus <adam@migus.org>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
@@ -12,15 +13,15 @@ short_description: Get secrets from Thycotic DevOps Secrets Vault
 version_added: 1.0.0
 description:
     - Uses the Thycotic DevOps Secrets Vault Python SDK to get Secrets from a
-      DSV I(tenant) using a I(client_id) and I(client_secret).
+      DSV O(tenant) using a O(client_id) and O(client_secret).
 requirements:
     - python-dsv-sdk - https://pypi.org/project/python-dsv-sdk/
 options:
     _terms:
-        description: The path to the secret, e.g. C(/staging/servers/web1).
+        description: The path to the secret, for example V(/staging/servers/web1).
         required: true
     tenant:
-        description: The first format parameter in the default I(url_template).
+        description: The first format parameter in the default O(url_template).
         env:
             - name: DSV_TENANT
         ini:
@@ -30,7 +31,7 @@ options:
     tld:
         default: com
         description: The top-level domain of the tenant; the second format
-            parameter in the default I(url_template).
+            parameter in the default O(url_template).
         env:
             - name: DSV_TLD
         ini:
@@ -46,7 +47,7 @@ options:
               key: client_id
         required: true
     client_secret:
-        description: The client secret associated with the specific I(client_id).
+        description: The client secret associated with the specific O(client_id).
         env:
             - name: DSV_CLIENT_SECRET
         ini:
@@ -105,11 +106,15 @@ display = Display()
 class LookupModule(LookupBase):
     @staticmethod
     def Client(vault_parameters):
-        return SecretsVault(**vault_parameters)
+        try:
+            vault = SecretsVault(**vault_parameters)
+            return vault
+        except TypeError:
+            raise AnsibleError("python-dsv-sdk==0.0.1 must be installed to use this plugin")
 
     def run(self, terms, variables, **kwargs):
         if sdk_is_missing:
-            raise AnsibleError("python-dsv-sdk must be installed to use this plugin")
+            raise AnsibleError("python-dsv-sdk==0.0.1 must be installed to use this plugin")
 
         self.set_options(var_options=variables, direct=kwargs)
 
@@ -118,6 +123,7 @@ class LookupModule(LookupBase):
                 "tenant": self.get_option("tenant"),
                 "client_id": self.get_option("client_id"),
                 "client_secret": self.get_option("client_secret"),
+                "tld": self.get_option("tld"),
                 "url_template": self.get_option("url_template"),
             }
         )

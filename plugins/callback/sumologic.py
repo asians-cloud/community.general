@@ -1,36 +1,25 @@
 # -*- coding: utf-8 -*-
-# This file is part of Ansible
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
+# Copyright (c) Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 name: sumologic
-type: aggregate
+type: notification
 short_description: Sends task result events to Sumologic
 author: "Ryan Currah (@ryancurrah)"
 description:
-  - This callback plugin will send task results as JSON formatted events to a Sumologic HTTP collector source
+  - This callback plugin will send task results as JSON formatted events to a Sumologic HTTP collector source.
 requirements:
   - Whitelisting this callback plugin
-  - 'Create a HTTP collector source in Sumologic and specify a custom timestamp format of C(yyyy-MM-dd HH:mm:ss ZZZZ) and a custom timestamp locator
-    of C("timestamp": "(.*)")'
+  - 'Create a HTTP collector source in Sumologic and specify a custom timestamp format of V(yyyy-MM-dd HH:mm:ss ZZZZ) and a custom timestamp locator
+    of V("timestamp": "(.*\)")'
 options:
   url:
-    description: URL to the Sumologic HTTP collector source
+    description: URL to the Sumologic HTTP collector source.
     env:
       - name: SUMOLOGIC_URL
     ini:
@@ -39,7 +28,7 @@ options:
 '''
 
 EXAMPLES = '''
-examples: >
+examples: |
   To enable, add this to your ansible.cfg file in the defaults block
     [defaults]
     callback_whitelist = community.general.sumologic
@@ -122,7 +111,7 @@ class SumologicHTTPCollectorSource(object):
 
 class CallbackModule(CallbackBase):
     CALLBACK_VERSION = 2.0
-    CALLBACK_TYPE = 'aggregate'
+    CALLBACK_TYPE = 'notification'
     CALLBACK_NAME = 'community.general.sumologic'
     CALLBACK_NEEDS_WHITELIST = True
 

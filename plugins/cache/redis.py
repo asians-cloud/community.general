@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# (c) 2014, Brian Coca, Josh Drake, et al
-# (c) 2017 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2014, Brian Coca, Josh Drake, et al
+# Copyright (c) 2017 Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
@@ -17,10 +18,10 @@ DOCUMENTATION = '''
       _uri:
         description:
           - A colon separated string of connection information for Redis.
-          - The format is C(host:port:db:password), for example C(localhost:6379:0:changeme).
-          - To use encryption in transit, prefix the connection with C(tls://), as in C(tls://localhost:6379:0:changeme).
-          - To use redis sentinel, use separator C(;), for example C(localhost:26379;localhost:26379;0:changeme). Requires redis>=2.9.0.
-        required: True
+          - The format is V(host:port:db:password), for example V(localhost:6379:0:changeme).
+          - To use encryption in transit, prefix the connection with V(tls://), as in V(tls://localhost:6379:0:changeme).
+          - To use redis sentinel, use separator V(;), for example V(localhost:26379;localhost:26379;0:changeme). Requires redis>=2.9.0.
+        required: true
         env:
           - name: ANSIBLE_CACHE_PLUGIN_CONNECTION
         ini:
@@ -66,12 +67,10 @@ import re
 import time
 import json
 
-from ansible import constants as C
 from ansible.errors import AnsibleError
 from ansible.module_utils.common.text.converters import to_native
 from ansible.parsing.ajson import AnsibleJSONEncoder, AnsibleJSONDecoder
 from ansible.plugins.cache import BaseCacheModule
-from ansible.release import __version__ as ansible_base_version
 from ansible.utils.display import Display
 
 try:
@@ -99,23 +98,13 @@ class CacheModule(BaseCacheModule):
     def __init__(self, *args, **kwargs):
         uri = ''
 
-        try:
-            super(CacheModule, self).__init__(*args, **kwargs)
-            if self.get_option('_uri'):
-                uri = self.get_option('_uri')
-            self._timeout = float(self.get_option('_timeout'))
-            self._prefix = self.get_option('_prefix')
-            self._keys_set = self.get_option('_keyset_name')
-            self._sentinel_service_name = self.get_option('_sentinel_service_name')
-        except KeyError:
-            # TODO: remove once we no longer support Ansible 2.9
-            if not ansible_base_version.startswith('2.9.'):
-                raise AnsibleError("Do not import CacheModules directly. Use ansible.plugins.loader.cache_loader instead.")
-            if C.CACHE_PLUGIN_CONNECTION:
-                uri = C.CACHE_PLUGIN_CONNECTION
-            self._timeout = float(C.CACHE_PLUGIN_TIMEOUT)
-            self._prefix = C.CACHE_PLUGIN_PREFIX
-            self._keys_set = 'ansible_cache_keys'
+        super(CacheModule, self).__init__(*args, **kwargs)
+        if self.get_option('_uri'):
+            uri = self.get_option('_uri')
+        self._timeout = float(self.get_option('_timeout'))
+        self._prefix = self.get_option('_prefix')
+        self._keys_set = self.get_option('_keyset_name')
+        self._sentinel_service_name = self.get_option('_sentinel_service_name')
 
         if not HAS_REDIS:
             raise AnsibleError("The 'redis' python module (version 2.4.5 or newer) is required for the redis fact cache, 'pip install redis'")
@@ -161,7 +150,7 @@ class CacheModule(BaseCacheModule):
         # format: "localhost:26379;localhost2:26379;0:changeme"
         connections = uri.split(';')
         connection_args = connections.pop(-1)
-        if len(connection_args) > 0:  # hanle if no db nr is given
+        if len(connection_args) > 0:  # handle if no db nr is given
             connection_args = connection_args.split(':')
             kw['db'] = connection_args.pop(0)
             try:

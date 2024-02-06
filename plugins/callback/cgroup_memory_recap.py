@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-# (c) 2018 Matt Martz <matt@sivel.net>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2018 Matt Martz <matt@sivel.net>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 # Make coding more python3-ish
 from __future__ import (absolute_import, division, print_function)
@@ -15,23 +16,23 @@ DOCUMENTATION = '''
       - cgroups
     short_description: Profiles maximum memory usage of tasks and full execution using cgroups
     description:
-        - This is an ansible callback plugin that profiles maximum memory usage of ansible and individual tasks, and displays a recap at the end using cgroups
+        - This is an ansible callback plugin that profiles maximum memory usage of ansible and individual tasks, and displays a recap at the end using cgroups.
     notes:
-        - Requires ansible to be run from within a cgroup, such as with C(cgexec -g memory:ansible_profile ansible-playbook ...)
-        - This cgroup should only be used by ansible to get accurate results
-        - To create the cgroup, first use a command such as C(sudo cgcreate -a ec2-user:ec2-user -t ec2-user:ec2-user -g memory:ansible_profile)
+        - Requires ansible to be run from within a cgroup, such as with C(cgexec -g memory:ansible_profile ansible-playbook ...).
+        - This cgroup should only be used by ansible to get accurate results.
+        - To create the cgroup, first use a command such as C(sudo cgcreate -a ec2-user:ec2-user -t ec2-user:ec2-user -g memory:ansible_profile).
     options:
       max_mem_file:
-        required: True
-        description: Path to cgroups C(memory.max_usage_in_bytes) file. Example C(/sys/fs/cgroup/memory/ansible_profile/memory.max_usage_in_bytes)
+        required: true
+        description: Path to cgroups C(memory.max_usage_in_bytes) file. Example V(/sys/fs/cgroup/memory/ansible_profile/memory.max_usage_in_bytes).
         env:
           - name: CGROUP_MAX_MEM_FILE
         ini:
           - section: callback_cgroupmemrecap
             key: max_mem_file
       cur_mem_file:
-        required: True
-        description: Path to C(memory.usage_in_bytes) file. Example C(/sys/fs/cgroup/memory/ansible_profile/memory.usage_in_bytes)
+        required: true
+        description: Path to C(memory.usage_in_bytes) file. Example V(/sys/fs/cgroup/memory/ansible_profile/memory.usage_in_bytes).
         env:
           - name: CGROUP_CUR_MEM_FILE
         ini:

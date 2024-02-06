@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# Copyright: (c) 2018, Hewlett Packard Enterprise Development LP
-# GNU General Public License v3.0+
-# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2018, Hewlett Packard Enterprise Development LP
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -29,8 +29,7 @@ options:
       required: true
 
 requirements:
-  - hpe3par_sdk >= 1.0.2. Install using 'pip install hpe3par_sdk'
+  - hpe3par_sdk >= 1.0.2. Install using C(pip install hpe3par_sdk).
   - WSAPI service should be enabled on the 3PAR storage array.
 notes:
-  -  check_mode not supported
     '''

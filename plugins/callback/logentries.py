@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# (c) 2015, Logentries.com, Jimmy Tang <jimmy.tang@logentries.com>
-# (c) 2017 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2015, Logentries.com, Jimmy Tang <jimmy.tang@logentries.com>
+# Copyright (c) 2017 Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
@@ -12,15 +13,15 @@ DOCUMENTATION = '''
     short_description: Sends events to Logentries
     description:
       - This callback plugin will generate JSON objects and send them to Logentries via TCP for auditing/debugging purposes.
-      - Before 2.4, if you wanted to use an ini configuration, the file must be placed in the same directory as this plugin and named logentries.ini
+      - Before 2.4, if you wanted to use an ini configuration, the file must be placed in the same directory as this plugin and named C(logentries.ini).
       - In 2.4 and above you can just put it in the main Ansible configuration file.
     requirements:
       - whitelisting in configuration
-      - certifi (python library)
-      - flatdict (python library), if you want to use the 'flatten' option
+      - certifi (Python library)
+      - flatdict (Python library), if you want to use the O(flatten) option
     options:
       api:
-        description: URI to the Logentries API
+        description: URI to the Logentries API.
         env:
           - name: LOGENTRIES_API
         default: data.logentries.com
@@ -28,7 +29,7 @@ DOCUMENTATION = '''
           - section: callback_logentries
             key: api
       port:
-        description: HTTP port to use when connecting to the API
+        description: HTTP port to use when connecting to the API.
         env:
             - name: LOGENTRIES_PORT
         default: 80
@@ -36,7 +37,7 @@ DOCUMENTATION = '''
           - section: callback_logentries
             key: port
       tls_port:
-        description: Port to use when connecting to the API when TLS is enabled
+        description: Port to use when connecting to the API when TLS is enabled.
         env:
             - name: LOGENTRIES_TLS_PORT
         default: 443
@@ -44,27 +45,27 @@ DOCUMENTATION = '''
           - section: callback_logentries
             key: tls_port
       token:
-        description: The logentries "TCP token"
+        description: The logentries C(TCP token).
         env:
           - name: LOGENTRIES_ANSIBLE_TOKEN
-        required: True
+        required: true
         ini:
           - section: callback_logentries
             key: token
       use_tls:
         description:
-          - Toggle to decide whether to use TLS to encrypt the communications with the API server
+          - Toggle to decide whether to use TLS to encrypt the communications with the API server.
         env:
           - name: LOGENTRIES_USE_TLS
-        default: False
+        default: false
         type: boolean
         ini:
           - section: callback_logentries
             key: use_tls
       flatten:
-        description: flatten complex data structures into a single dictionary with complex keys
+        description: Flatten complex data structures into a single dictionary with complex keys.
         type: boolean
-        default: False
+        default: false
         env:
           - name: LOGENTRIES_FLATTEN
         ini:
@@ -89,9 +90,9 @@ examples: >
     api = data.logentries.com
     port = 10000
     tls_port = 20000
-    use_tls = no
+    use_tls = true
     token = dd21fc88-f00a-43ff-b977-e3a4233c53af
-    flatten = False
+    flatten = false
 '''
 
 import os
@@ -195,15 +196,11 @@ else:
     class TLSSocketAppender(PlainTextSocketAppender):
         def open_connection(self):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock = ssl.wrap_socket(
+            context = ssl.create_default_context(
+                purpose=ssl.Purpose.SERVER_AUTH,
+                cafile=certifi.where(), )
+            sock = context.wrap_socket(
                 sock=sock,
-                keyfile=None,
-                certfile=None,
-                server_side=False,
-                cert_reqs=ssl.CERT_REQUIRED,
-                ssl_version=getattr(
-                    ssl, 'PROTOCOL_TLSv1_2', ssl.PROTOCOL_TLSv1),
-                ca_certs=certifi.where(),
                 do_handshake_on_connect=True,
                 suppress_ragged_eofs=True, )
             sock.connect((self.LE_API, self.LE_TLS_PORT))

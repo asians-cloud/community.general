@@ -1,12 +1,14 @@
+---
 ####################################################################
 # WARNING: These are designed specifically for Ansible tests       #
 # and should not be used as examples of how to write Ansible roles #
 ####################################################################
 
 # Test code for the homebrew_cask module.
-# Copyright: (c) 2022, Joseph Torcasso <jtorcass@redhat.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
----
+# Copyright (c) 2022, Joseph Torcasso <jtorcass@redhat.com>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
+
   - name: Find brew binary
     command: which brew
     register: brew_which
@@ -23,7 +25,7 @@
         homebrew_cask:
           name: "{{ cask }}"
           state: present
-        become: yes
+        become: true
         become_user: "{{ brew_stat.stat.pw_name }}"
         register: cask_install_result
 
@@ -36,7 +38,7 @@
         homebrew_cask:
           name: "{{ cask }}"
           state: present
-        become: yes
+        become: true
         become_user: "{{ brew_stat.stat.pw_name }}"
         register: cask_install_result
 
@@ -51,7 +53,7 @@
           name: "{{ cask }}"
           state: present
           install_options: force
-        become: yes
+        become: true
         become_user: "{{ brew_stat.stat.pw_name }}"
         register: cask_install_result
 
@@ -66,6 +68,6 @@
           name: "{{ cask }}"
           state: absent
           install_options: force
-        become: yes
+        become: true
         become_user: "{{ brew_stat.stat.pw_name }}"
-        ignore_errors: yes
+        ignore_errors: true

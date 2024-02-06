@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# (c) 2014, Brian Coca, Josh Drake, et al
-# (c) 2017 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2014, Brian Coca, Josh Drake, et al
+# Copyright (c) 2017 Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -20,6 +21,7 @@ DOCUMENTATION = '''
           - List of connection information for the memcached DBs
         default: ['127.0.0.1:11211']
         type: list
+        elements: string
         env:
           - name: ANSIBLE_CACHE_PLUGIN_CONNECTION
         ini:
@@ -50,11 +52,9 @@ import time
 from multiprocessing import Lock
 from itertools import chain
 
-from ansible import constants as C
 from ansible.errors import AnsibleError
 from ansible.module_utils.common._collections_compat import MutableSet
 from ansible.plugins.cache import BaseCacheModule
-from ansible.release import __version__ as ansible_base_version
 from ansible.utils.display import Display
 
 try:
@@ -175,20 +175,11 @@ class CacheModule(BaseCacheModule):
     def __init__(self, *args, **kwargs):
         connection = ['127.0.0.1:11211']
 
-        try:
-            super(CacheModule, self).__init__(*args, **kwargs)
-            if self.get_option('_uri'):
-                connection = self.get_option('_uri')
-            self._timeout = self.get_option('_timeout')
-            self._prefix = self.get_option('_prefix')
-        except KeyError:
-            # TODO: remove once we no longer support Ansible 2.9
-            if not ansible_base_version.startswith('2.9.'):
-                raise AnsibleError("Do not import CacheModules directly. Use ansible.plugins.loader.cache_loader instead.")
-            if C.CACHE_PLUGIN_CONNECTION:
-                connection = C.CACHE_PLUGIN_CONNECTION.split(',')
-            self._timeout = C.CACHE_PLUGIN_TIMEOUT
-            self._prefix = C.CACHE_PLUGIN_PREFIX
+        super(CacheModule, self).__init__(*args, **kwargs)
+        if self.get_option('_uri'):
+            connection = self.get_option('_uri')
+        self._timeout = self.get_option('_timeout')
+        self._prefix = self.get_option('_prefix')
 
         if not HAS_MEMCACHE:
             raise AnsibleError("python-memcached is required for the memcached fact cache")

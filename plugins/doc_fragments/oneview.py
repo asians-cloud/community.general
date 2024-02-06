@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright: (c) 2016-2017, Hewlett Packard Enterprise Development LP
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2016-2017, Hewlett Packard Enterprise Development LP
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -14,7 +15,7 @@ class ModuleDocFragment(object):
 options:
     config:
         description:
-        - Path to a .json configuration file containing the OneView client configuration.
+        - Path to a JSON configuration file containing the OneView client configuration.
           The configuration file is optional and when used should be present in the host running the ansible commands.
           If the file path is not provided, the configuration will be loaded from environment variables.
           For links to example configuration files or how to use the environment variables verify the notes section.
@@ -41,7 +42,7 @@ options:
         type: str
 
 requirements:
-  - python >= 2.7.9
+  - Python >= 2.7.9
 
 notes:
     - "A sample configuration file for the config parameter can be found at:
@@ -62,18 +63,18 @@ options:
             - When the ETag Validation is enabled, the request will be conditionally processed only if the current ETag
                 for the resource matches the ETag provided in the data.
         type: bool
-        default: yes
+        default: true
 '''
 
     FACTSPARAMS = r'''
 options:
     params:
         description:
-        - List of params to delimit, filter and sort the list of resources.
-        - "params allowed:
-            - C(start): The first item to return, using 0-based indexing.
-            - C(count): The number of resources to return.
-            - C(filter): A general filter/query string to narrow the list of items returned.
-            - C(sort): The sort order of the returned data set."
+        - List of parameters to delimit, filter and sort the list of resources.
+        - "Parameter keys allowed are:"
+        - "C(start): The first item to return, using 0-based indexing."
+        - "C(count): The number of resources to return."
+        - "C(filter): A general filter/query string to narrow the list of items returned."
+        - "C(sort): The sort order of the returned data set."
         type: dict
 '''

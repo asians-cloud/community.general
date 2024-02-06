@@ -1,3 +1,9 @@
+<!--
+Copyright (c) Ansible Project
+GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # Contributing
 
 We follow [Ansible Code of Conduct](https://docs.ansible.com/ansible/latest/community/code_of_conduct.html) in all our contributions and interactions within this repository.
@@ -25,7 +31,7 @@ Also, consider taking up a valuable, reviewed, but abandoned pull request which 
 * Try committing your changes with an informative but short commit message.
 * Do not squash your commits and force-push to your branch if not needed. Reviews of your pull request are much easier with individual commits to comprehend the pull request history. All commits of your pull request branch will be squashed into one commit by GitHub upon merge.
 * Do not add merge commits to your PR. The bot will complain and you will have to rebase ([instructions for rebasing](https://docs.ansible.com/ansible/latest/dev_guide/developing_rebasing.html)) to remove them before your PR can be merged. To avoid that git automatically does merges during pulls, you can configure it to do rebases instead by running `git config pull.rebase true` inside the repository checkout.
-* Make sure your PR includes a [changelog fragment](https://docs.ansible.com/ansible/devel/community/development_process.html#changelogs-how-to). (You must not include a fragment for new modules or new plugins, except for test and filter plugins. Also you shouldn't include one for docs-only changes. If you're not sure, simply don't include one, we'll tell you whether one is needed or not :) )
+* Make sure your PR includes a [changelog fragment](https://docs.ansible.com/ansible/devel/community/development_process.html#creating-changelog-fragments). (You must not include a fragment for new modules or new plugins. Also you shouldn't include one for docs-only changes. If you're not sure, simply don't include one, we'll tell you whether one is needed or not :) )
 * Avoid reformatting unrelated parts of the codebase in your PR. These types of changes will likely be requested for reversion, create additional work for reviewers, and may cause approval to be delayed.
 
 You can also read [our Quick-start development guide](https://github.com/ansible/community-docs/blob/main/create_pr_quick_start_guide.rst).
@@ -106,32 +112,12 @@ Creating new modules and plugins requires a bit more work than other Pull Reques
    - Make sure that new plugins and modules have tests (unit tests, integration tests, or both); it is preferable to have some tests
      which run in CI.
 
-4. For modules and action plugins, make sure to create your module/plugin in the correct subdirectory, and create a symbolic link
-   from `plugins/modules/` respectively `plugins/action/` to the actual module/plugin code. (Other plugin types should not use
-   subdirectories.)
-
-   - Action plugins need to be accompanied by a module, even if the module file only contains documentation
-     (`DOCUMENTATION`, `EXAMPLES` and `RETURN`). The module must have the same name and directory path in `plugins/modules/`
-     than the action plugin has in `plugins/action/`.
+4. Action plugins need to be accompanied by a module, even if the module file only contains documentation
+   (`DOCUMENTATION`, `EXAMPLES` and `RETURN`). The module must have the same name and directory path in `plugins/modules/`
+   than the action plugin has in `plugins/action/`.
 
 5. Make sure to add a BOTMETA entry for your new module/plugin in `.github/BOTMETA.yml`. Search for other plugins/modules in the
    same directory to see how entries could look. You should list all authors either as `maintainers` or under `ignore`. People
    listed as `maintainers` will be pinged for new issues and PRs that modify the module/plugin or its tests.
 
    When you add a new plugin/module, we expect that you perform maintainer duty for at least some time after contributing it.
-
-## pre-commit
-
-To help ensure high-quality contributions this repository includes a [pre-commit](https://pre-commit.com) configuration which
-corrects and tests against common issues that would otherwise cause CI to fail. To begin using these pre-commit hooks see
-the [Installation](#installation) section below.
-
-This is optional and not required to contribute to this repository.
-
-### Installation
-
-Follow the [instructions](https://pre-commit.com/#install) provided with pre-commit and run `pre-commit install` under the repository base. If for any reason you would like to disable the pre-commit hooks run `pre-commit uninstall`.
-
-This is optional to run it locally.
-
-You can trigger it locally with `pre-commit run --all-files` or even to run only for a given file `pre-commit run --files YOUR_FILE`.

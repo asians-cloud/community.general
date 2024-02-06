@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # Copyright (C) 2016 maxn nikolaev.makc@gmail.com
 # Copyright (c) 2017 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -12,29 +13,29 @@ DOCUMENTATION = '''
     type: notification
     short_description: post task events to a jabber server
     description:
-      - The chatty part of ChatOps with a Hipchat server as a target
+      - The chatty part of ChatOps with a Hipchat server as a target.
       - This callback plugin sends status updates to a HipChat channel during playbook execution.
     requirements:
-      - xmpp (python lib https://github.com/ArchipelProject/xmpppy)
+      - xmpp (Python library U(https://github.com/ArchipelProject/xmpppy))
     options:
       server:
         description: connection info to jabber server
-        required: True
+        required: true
         env:
           - name: JABBER_SERV
       user:
         description: Jabber user to authenticate as
-        required: True
+        required: true
         env:
           - name: JABBER_USER
       password:
         description: Password for the user to the jabber server
-        required: True
+        required: true
         env:
           - name: JABBER_PASS
       to:
         description: chat identifier that will receive the message
-        required: True
+        required: true
         env:
           - name: JABBER_TO
 '''

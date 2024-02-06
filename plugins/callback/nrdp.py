@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-# (c) 2018 Remi Verchere <remi@verchere.fr>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2018 Remi Verchere <remi@verchere.fr>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 # Make coding more python3-ish
 from __future__ import (absolute_import, division, print_function)
@@ -13,7 +14,7 @@ DOCUMENTATION = '''
     short_description: Post task results to a Nagios server through nrdp
     description:
         - This callback send playbook result to Nagios.
-        - Nagios shall use NRDP to recive passive events.
+        - Nagios shall use NRDP to receive passive events.
         - The passive check is sent to a dedicated host/service for Ansible.
     options:
         url:
@@ -65,9 +66,6 @@ DOCUMENTATION = '''
                   key: servicename
             type: string
 '''
-
-import os
-import json
 
 from ansible.module_utils.six.moves.urllib.parse import urlencode
 from ansible.module_utils.common.text.converters import to_bytes

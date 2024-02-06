@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2021 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -22,30 +23,30 @@ DOCUMENTATION = '''
         - inventory_cache
     options:
         plugin:
-            description: The name of this plugin, it should always be set to C(community.general.xen_orchestra) for this plugin to recognize it as its own.
-            required: yes
+            description: The name of this plugin, it should always be set to V(community.general.xen_orchestra) for this plugin to recognize it as its own.
+            required: true
             choices: ['community.general.xen_orchestra']
             type: str
         api_host:
             description:
                 - API host to XOA API.
-                - If the value is not specified in the inventory configuration, the value of environment variable C(ANSIBLE_XO_HOST) will be used instead.
+                - If the value is not specified in the inventory configuration, the value of environment variable E(ANSIBLE_XO_HOST) will be used instead.
             type: str
             env:
                 - name: ANSIBLE_XO_HOST
         user:
             description:
                 - Xen Orchestra user.
-                - If the value is not specified in the inventory configuration, the value of environment variable C(ANSIBLE_XO_USER) will be used instead.
-            required: yes
+                - If the value is not specified in the inventory configuration, the value of environment variable E(ANSIBLE_XO_USER) will be used instead.
+            required: true
             type: str
             env:
                 - name: ANSIBLE_XO_USER
         password:
             description:
                 - Xen Orchestra password.
-                - If the value is not specified in the inventory configuration, the value of environment variable C(ANSIBLE_XO_PASSWORD) will be used instead.
-            required: yes
+                - If the value is not specified in the inventory configuration, the value of environment variable E(ANSIBLE_XO_PASSWORD) will be used instead.
+            required: true
             type: str
             env:
                 - name: ANSIBLE_XO_PASSWORD
@@ -77,6 +78,7 @@ compose:
 
 import json
 import ssl
+from time import sleep
 
 from ansible.errors import AnsibleError
 from ansible.plugins.inventory import BaseInventoryPlugin, Constructable, Cacheable
@@ -137,21 +139,42 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         self.conn = create_connection(
             '{0}://{1}/api/'.format(proto, xoa_api_host), sslopt=sslopt)
 
+    CALL_TIMEOUT = 100
+    """Number of 1/10ths of a second to wait before method call times out."""
+
+    def call(self, method, params):
+        """Calls a method on the XO server with the provided parameters."""
+        id = self.pointer
+        self.conn.send(json.dumps({
+            'id': id,
+            'jsonrpc': '2.0',
+            'method': method,
+            'params': params
+        }))
+
+        waited = 0
+        while waited < self.CALL_TIMEOUT:
+            response = json.loads(self.conn.recv())
+            if 'id' in response and response['id'] == id:
+                return response
+            else:
+                sleep(0.1)
+                waited += 1
+
+        raise AnsibleError(
+            'Method call {method} timed out after {timeout} seconds.'.format(method=method, timeout=self.CALL_TIMEOUT / 10))
+
     def login(self, user, password):
-        payload = {'id': self.pointer, 'jsonrpc': '2.0', 'method': 'session.signIn', 'params': {
-            'username': user, 'password': password}}
-        self.conn.send(json.dumps(payload))
-        result = json.loads(self.conn.recv())
+        result = self.call('session.signIn', {
+            'username': user, 'password': password
+        })
 
         if 'error' in result:
             raise AnsibleError(
                 'Could not connect: {0}'.format(result['error']))
 
     def get_object(self, name):
-        payload = {'id': self.pointer, 'jsonrpc': '2.0',
-                   'method': 'xo.getAllObjects', 'params': {'filter': {'type': name}}}
-        self.conn.send(json.dumps(payload))
-        answer = json.loads(self.conn.recv())
+        answer = self.call('xo.getAllObjects', {'filter': {'type': name}})
 
         if 'error' in answer:
             raise AnsibleError(

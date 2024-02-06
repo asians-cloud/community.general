@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) Ansible project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 DOCUMENTATION = '''
     name: loganalytics
-    type: aggregate
+    type: notification
     short_description: Posts task results to Azure Log Analytics
     author: "Cyrus Li (@zhcli) <cyrus1006@gmail.com>"
     description:
@@ -52,7 +54,6 @@ examples: |
 import hashlib
 import hmac
 import base64
-import logging
 import json
 import uuid
 import socket
@@ -153,7 +154,7 @@ class AzureLogAnalyticsSource(object):
 
 class CallbackModule(CallbackBase):
     CALLBACK_VERSION = 2.0
-    CALLBACK_TYPE = 'aggregate'
+    CALLBACK_TYPE = 'notification'
     CALLBACK_NAME = 'loganalytics'
     CALLBACK_NEEDS_WHITELIST = True
 

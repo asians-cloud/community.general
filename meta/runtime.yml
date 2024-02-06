@@ -1,5 +1,17 @@
 ---
-requires_ansible: '>=2.9.10'
+# Copyright (c) Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+requires_ansible: '>=2.13.0'
+action_groups:
+  consul:
+    - consul_auth_method
+    - consul_binding_rule
+    - consul_policy
+    - consul_role
+    - consul_session
+    - consul_token
 plugin_routing:
   connection:
     docker:
@@ -18,10 +30,136 @@ plugin_routing:
     nios_next_network:
       redirect: infoblox.nios_modules.nios_next_network
   modules:
+    consul_acl:
+      deprecation:
+        removal_version: 10.0.0
+        warning_text: Use community.general.consul_token and/or community.general.consul_policy instead.
+    rax_cbs_attachments:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_cbs:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_cdb_database:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_cdb_user:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_cdb:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_clb_nodes:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_clb_ssl:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_clb:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_dns_record:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_dns:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_facts:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_files_objects:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_files:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_identity:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_keypair:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_meta:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_mon_alarm:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_mon_check:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_mon_entity:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_mon_notification_plan:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_mon_notification:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_network:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_queue:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_scaling_group:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rax_scaling_policy:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on the deprecated package pyrax.
+    rhn_channel:
+      deprecation:
+        removal_version: 10.0.0
+        warning_text: RHN is EOL, please contact the community.general maintainers
+          if still using this; see the module documentation for more details.
+    rhn_register:
+      deprecation:
+        removal_version: 10.0.0
+        warning_text: RHN is EOL, please contact the community.general maintainers
+          if still using this; see the module documentation for more details.
+    stackdriver:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on HTTPS APIs that do not exist anymore,
+          and any new development in the direction of providing an alternative should
+          happen in the context of the google.cloud collection.
     ali_instance_facts:
       tombstone:
         removal_version: 3.0.0
         warning_text: Use community.general.ali_instance_info instead.
+    cisco_spark:
+      redirect: community.general.cisco_webex
     docker_compose:
       redirect: community.docker.docker_compose
     docker_config:
@@ -76,6 +214,11 @@ plugin_routing:
       redirect: community.docker.docker_volume
     docker_volume_info:
       redirect: community.docker.docker_volume_info
+    flowdock:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on HTTPS APIs that do not exist anymore and
+          there is no clear path to update.
     foreman:
       tombstone:
         removal_version: 2.0.0
@@ -154,6 +297,8 @@ plugin_routing:
         removal_version: 2.0.0
         warning_text: Use community.general.github_webhook and community.general.github_webhook_info
           instead.
+    hana_query:
+      redirect: community.sap_libs.sap_hdbsql
     hetzner_failover_ip:
       redirect: community.hrobot.failover_ip
     hetzner_failover_ip_info:
@@ -499,6 +644,10 @@ plugin_routing:
       tombstone:
         removal_version: 3.0.0
         warning_text: Use community.general.redfish_info instead.
+    sapcar_extract:
+      redirect: community.sap_libs.sapcar_extract
+    sap_task_list_execute:
+      redirect: community.sap_libs.sap_task_list_execute
     scaleway_image_facts:
       tombstone:
         removal_version: 3.0.0
@@ -555,11 +704,41 @@ plugin_routing:
       tombstone:
         removal_version: 3.0.0
         warning_text: Use community.general.vertica_info instead.
+    webfaction_app:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on HTTPS APIs that do not exist anymore and
+          there is no clear path to update.
+    webfaction_db:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on HTTPS APIs that do not exist anymore and
+          there is no clear path to update.
+    webfaction_domain:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on HTTPS APIs that do not exist anymore and
+          there is no clear path to update.
+    webfaction_mailbox:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on HTTPS APIs that do not exist anymore and
+          there is no clear path to update.
+    webfaction_site:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module relies on HTTPS APIs that do not exist anymore and
+          there is no clear path to update.
     xenserver_guest_facts:
       tombstone:
         removal_version: 3.0.0
         warning_text: Use community.general.xenserver_guest_info instead.
   doc_fragments:
+    rackspace:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This doc fragment is used by rax modules, that rely on the deprecated
+          package pyrax.
     _gcp:
       redirect: community.google._gcp
     docker:
@@ -575,6 +754,10 @@ plugin_routing:
     postgresql:
       redirect: community.postgresql.postgresql
   module_utils:
+    rax:
+      deprecation:
+        removal_version: 9.0.0
+        warning_text: This module util relies on the deprecated package pyrax.
     docker.common:
       redirect: community.docker.common
     docker.swarm:
@@ -608,6 +791,8 @@ plugin_routing:
         removal_version: 2.0.0
         warning_text: Use the 'default' callback plugin with 'display_skipped_hosts
           = no' option.
+    osx_say:
+      redirect: community.general.say
     stderr:
       tombstone:
         removal_version: 2.0.0
@@ -624,6 +809,9 @@ plugin_routing:
     path_join:
       # The ansible.builtin.path_join filter has been added in ansible-base 2.10.
       # Since plugin routing is only available since ansible-base 2.10, this
-      # redirect will be used for ansible-base 2.10 or later, and the included
-      # path_join filter will be used for Ansible 2.9 or earlier.
+      # redirect will be used for ansible-base 2.10 or later. This was mostly
+      # relevant before community.general 5.0.0, when community.general also
+      # supported Ansible 2.9. Back then, the included path_join filter was used
+      # for Ansible 2.9 or earlier. Now we only will have the redirect until we
+      # eventually will deprecate and then remove it.
       redirect: ansible.builtin.path_join

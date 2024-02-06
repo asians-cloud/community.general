@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Florian Dambrine <android.florian@gmail.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) 2021, Florian Dambrine <android.florian@gmail.com>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 
@@ -37,7 +38,7 @@ options:
         default: true
         description:
         - If certificates should be validated or not.
-        - This should never be set to C(false), except if you are very sure that
+        - This should never be set to V(false), except if you are very sure that
           your connection to the server can not be subject to a Man In The Middle
           attack.
 """

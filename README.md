@@ -1,6 +1,13 @@
+<!--
+Copyright (c) Ansible Project
+GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # Community General Collection
 
 [![Build Status](https://dev.azure.com/ansible/community.general/_apis/build/status/CI?branchName=main)](https://dev.azure.com/ansible/community.general/_build?definitionId=31)
+[![EOL CI](https://github.com/ansible-collections/community.general/workflows/EOL%20CI/badge.svg?event=push)](https://github.com/ansible-collections/community.general/actions)
 [![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/community.general)](https://codecov.io/gh/ansible-collections/community.general)
 
 This repository contains the `community.general` Ansible Collection. The collection is a part of the Ansible package and includes many modules and plugins supported by Ansible community which are not part of more specialized community collections.
@@ -17,9 +24,7 @@ If you encounter abusive behavior violating the [Ansible Code of Conduct](https:
 
 ## Tested with Ansible
 
-Tested with the current Ansible 2.9, ansible-base 2.10, ansible-core 2.11, ansible-core 2.12 releases and the current development version of ansible-core. Ansible versions before 2.9.10 are not supported.
-
-Parts of this collection do not work with ansible-core before 2.12 (this includes ansible-base and Ansible 2.9) on Python 2.12+.
+Tested with the current ansible-core 2.13, ansible-core 2.14, ansible-core 2.15, ansible-core 2.16 releases and the current development version of ansible-core. Ansible-core versions before 2.13.0 are not supported. This includes all ansible-base 2.10 and Ansible 2.9 releases.
 
 ## External requirements
 
@@ -27,13 +32,13 @@ Some modules and plugins require external libraries. Please check the requiremen
 
 ## Included content
 
-Please check the included content on the [Ansible Galaxy page for this collection](https://galaxy.ansible.com/community/general) or the [documentation on the Ansible docs site](https://docs.ansible.com/ansible/latest/collections/community/general/).
+Please check the included content on the [Ansible Galaxy page for this collection](https://galaxy.ansible.com/ui/repo/published/community/general/) or the [documentation on the Ansible docs site](https://docs.ansible.com/ansible/latest/collections/community/general/).
 
 ## Using this collection
 
 This collection is shipped with the Ansible package. So if you have it installed, no more action is required.
 
-If you have a minimal installation (only Ansible Core installed) or you want to use the latest version of the collection along with the whole Ansible package, you need to install the collection from [Ansible Galaxy](https://galaxy.ansible.com/community/general) manually with the `ansible-galaxy` command-line tool:
+If you have a minimal installation (only Ansible Core installed) or you want to use the latest version of the collection along with the whole Ansible package, you need to install the collection from [Ansible Galaxy](https://galaxy.ansible.com/ui/repo/published/community/general/) manually with the `ansible-galaxy` command-line tool:
 
     ansible-galaxy collection install community.general
 
@@ -50,7 +55,7 @@ Note that if you install the collection manually, it will not be upgraded automa
 ansible-galaxy collection install community.general --upgrade
 ```
 
-You can also install a specific version of the collection, for example, if you need to downgrade when something is broken in the latest version (please report an issue in this repository). Use the following syntax where `X.Y.Z` can be any [available version](https://galaxy.ansible.com/community/general):
+You can also install a specific version of the collection, for example, if you need to downgrade when something is broken in the latest version (please report an issue in this repository). Use the following syntax where `X.Y.Z` can be any [available version](https://galaxy.ansible.com/ui/repo/published/community/general/):
 
 ```bash
 ansible-galaxy collection install community.general:==X.Y.Z
@@ -127,6 +132,10 @@ See [this issue](https://github.com/ansible-collections/community.general/issues
 
 ## Licensing
 
-GNU General Public License v3.0 or later.
+This collection is primarily licensed and distributed as a whole under the GNU General Public License v3.0 or later.
 
-See [COPYING](https://www.gnu.org/licenses/gpl-3.0.txt) to see the full text.
+See [LICENSES/GPL-3.0-or-later.txt](https://github.com/ansible-collections/community.general/blob/main/COPYING) for the full text.
+
+Parts of the collection are licensed under the [BSD 2-Clause license](https://github.com/ansible-collections/community.general/blob/main/LICENSES/BSD-2-Clause.txt), the [MIT license](https://github.com/ansible-collections/community.general/blob/main/LICENSES/MIT.txt), and the [PSF 2.0 license](https://github.com/ansible-collections/community.general/blob/main/LICENSES/PSF-2.0.txt).
+
+All files have a machine readable `SDPX-License-Identifier:` comment denoting its respective license(s) or an equivalent entry in an accompanying `.license` file. Only changelog fragments (which will not be part of a release) are covered by a blanket statement in `.reuse/dep5`. This conforms to the [REUSE specification](https://reuse.software/spec/).

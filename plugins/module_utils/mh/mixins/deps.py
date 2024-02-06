@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # (c) 2020, Alexei Znamensky <russoz@gmail.com>
-# Copyright: (c) 2020, Ansible Project
-# Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
+# Copyright (c) 2020, Ansible Project
+# Simplified BSD License (see LICENSES/BSD-2-Clause.txt or https://opensource.org/licenses/BSD-2-Clause)
+# SPDX-License-Identifier: BSD-2-Clause
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -37,6 +38,12 @@ class DependencyCtxMgr(object):
 
 
 class DependencyMixin(ModuleHelperBase):
+    """
+    THIS CLASS IS BEING DEPRECATED.
+    See the deprecation notice in ``DependencyMixin.fail_on_missing_deps()`` below.
+
+    Mixin for mapping module options to running a CLI command with its arguments.
+    """
     _dependencies = []
 
     @classmethod
@@ -45,6 +52,14 @@ class DependencyMixin(ModuleHelperBase):
         return cls._dependencies[-1]
 
     def fail_on_missing_deps(self):
+        if not self._dependencies:
+            return
+        self.module.deprecate(
+            'The DependencyMixin is being deprecated. '
+            'Modules should use community.general.plugins.module_utils.deps instead.',
+            version='9.0.0',
+            collection_name='community.general',
+        )
         for d in self._dependencies:
             if not d.has_it:
                 self.module.fail_json(changed=False,

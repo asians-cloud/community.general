@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2017 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -11,7 +12,6 @@ DOCUMENTATION = r'''
       - Luke Murphy (@decentral1se)
     short_description: Ansible dynamic inventory plugin for Linode.
     requirements:
-        - python >= 2.7
         - linode_api4 >= 2.0.0
     description:
         - Reads inventories from the Linode API v4.
@@ -54,15 +54,18 @@ DOCUMENTATION = r'''
           description: Populate inventory with instances in this region.
           default: []
           type: list
+          elements: string
         tags:
           description: Populate inventory only with instances which have at least one of the tags listed here.
           default: []
           type: list
+          elements: string
           version_added: 2.0.0
         types:
           description: Populate inventory with instances with this type.
           default: []
           type: list
+          elements: string
         strict:
           version_added: 2.0.0
         compose:
@@ -117,12 +120,8 @@ compose:
   ansible_host: "ipv4 | community.general.json_query('[?public==`false`].address') | first"
 '''
 
-import os
-
-from ansible.errors import AnsibleError, AnsibleParserError
-from ansible.module_utils.six import string_types
+from ansible.errors import AnsibleError
 from ansible.plugins.inventory import BaseInventoryPlugin, Constructable, Cacheable
-from ansible.template import Templar
 
 
 try:
@@ -141,22 +140,14 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
     def _build_client(self, loader):
         """Build the Linode client."""
 
-        t = Templar(loader=loader)
-
         access_token = self.get_option('access_token')
-        if t.is_template(access_token):
-            access_token = t.template(variable=access_token, disable_lookups=False)
-
-        if access_token is None:
-            try:
-                access_token = os.environ['LINODE_ACCESS_TOKEN']
-            except KeyError:
-                pass
+        if self.templar.is_template(access_token):
+            access_token = self.templar.template(variable=access_token, disable_lookups=False)
 
         if access_token is None:
             raise AnsibleError((
                 'Could not retrieve Linode access token '
-                'from plugin configuration or environment'
+                'from plugin configuration sources'
             ))
 
         self.client = LinodeClient(access_token)
@@ -181,20 +172,23 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         for linode_group in self.linode_groups:
             self.inventory.add_group(linode_group)
 
-    def _filter_by_config(self, regions, types, tags):
+    def _filter_by_config(self):
         """Filter instances by user specified configuration."""
+        regions = self.get_option('regions')
         if regions:
             self.instances = [
                 instance for instance in self.instances
                 if instance.region.id in regions
             ]
 
+        types = self.get_option('types')
         if types:
             self.instances = [
                 instance for instance in self.instances
                 if instance.type.id in types
             ]
 
+        tags = self.get_option('tags')
         if tags:
             self.instances = [
                 instance for instance in self.instances
@@ -247,60 +241,13 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             )
         return data
 
-    def _validate_option(self, name, desired_type, option_value):
-        """Validate user specified configuration data against types."""
-        if isinstance(option_value, string_types) and desired_type == list:
-            option_value = [option_value]
-
-        if option_value is None:
-            option_value = desired_type()
-
-        if not isinstance(option_value, desired_type):
-            raise AnsibleParserError(
-                'The option %s (%s) must be a %s' % (
-                    name, option_value, desired_type
-                )
-            )
-
-        return option_value
-
-    def _get_query_options(self, config_data):
-        """Get user specified query options from the configuration."""
-        options = {
-            'regions': {
-                'type_to_be': list,
-                'value': config_data.get('regions', [])
-            },
-            'types': {
-                'type_to_be': list,
-                'value': config_data.get('types', [])
-            },
-            'tags': {
-                'type_to_be': list,
-                'value': config_data.get('tags', [])
-            },
-        }
-
-        for name in options:
-            options[name]['value'] = self._validate_option(
-                name,
-                options[name]['type_to_be'],
-                options[name]['value']
-            )
-
-        regions = options['regions']['value']
-        types = options['types']['value']
-        tags = options['tags']['value']
-
-        return regions, types, tags
-
     def _cacheable_inventory(self):
         return [i._raw_json for i in self.instances]
 
-    def populate(self, config_data):
+    def populate(self):
         strict = self.get_option('strict')
-        regions, types, tags = self._get_query_options(config_data)
-        self._filter_by_config(regions, types, tags)
+
+        self._filter_by_config()
 
         self._add_groups()
         self._add_instances_to_groups()
@@ -339,8 +286,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         if not HAS_LINODE:
             raise AnsibleError('the Linode dynamic inventory plugin requires linode_api4.')
 
-        config_data = self._read_config_data(path)
-        self._consume_options(config_data)
+        self._read_config_data(path)
 
         cache_key = self.get_cache_key(path)
 
@@ -363,4 +309,4 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         if update_cache:
             self._cache[cache_key] = self._cacheable_inventory()
 
-        self.populate(config_data)
+        self.populate()

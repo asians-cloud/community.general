@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# Copyright (c) Ansible project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -23,24 +24,26 @@ options:
   api_password:
     description:
       - Specify the password to authenticate with.
-      - You can use C(PROXMOX_PASSWORD) environment variable.
+      - You can use E(PROXMOX_PASSWORD) environment variable.
     type: str
   api_token_id:
     description:
       - Specify the token ID.
+      - Requires C(proxmoxer>=1.1.0) to work.
     type: str
     version_added: 1.3.0
   api_token_secret:
     description:
       - Specify the token secret.
+      - Requires C(proxmoxer>=1.1.0) to work.
     type: str
     version_added: 1.3.0
   validate_certs:
     description:
-      - If C(no), SSL certificates will not be validated.
+      - If V(false), SSL certificates will not be validated.
       - This should only be used on personally controlled sites using self-signed certificates.
     type: bool
-    default: no
+    default: false
 requirements: [ "proxmoxer", "requests" ]
 '''
 
@@ -54,7 +57,7 @@ options:
   node:
     description:
       - Proxmox VE node on which to operate.
-      - Only required for I(state=present).
+      - Only required for O(state=present).
       - For every other states it will be autodiscovered.
     type: str
   pool:

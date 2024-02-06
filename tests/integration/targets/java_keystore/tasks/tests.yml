@@ -1,4 +1,8 @@
 ---
+# Copyright (c) Ansible Project
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 - name: Create test directory
   ansible.builtin.file:
     path: "{{ remote_tmp_dir }}"
@@ -42,7 +46,7 @@
   loop: "{{ java_keystore_certs }}"
   loop_control:
     index_var: loop_index
-  check_mode: yes
+  check_mode: true
   register: result_check
 
 - name: Create a Java keystore for the given certificates
@@ -58,7 +62,7 @@
   loop: "{{ java_keystore_certs }}"
   loop_control:
     index_var: loop_index
-  check_mode: yes
+  check_mode: true
   register: result_idem_check
 
 - name: Create a Java keystore for the given certificates (idempotency)
@@ -98,7 +102,7 @@
   loop: "{{ java_keystore_new_certs }}"
   loop_control:
     index_var: loop_index
-  check_mode: yes
+  check_mode: true
   register: result_change_check
 
 - name: Create a Java keystore for the given certificates (certificate changed)
@@ -116,7 +120,7 @@
   loop: "{{ java_keystore_new_certs }}"
   loop_control:
     index_var: loop_index
-  check_mode: yes
+  check_mode: true
   register: result_alias_change_check
 
 - name: Create a Java keystore for the given certificates (alias changed)
@@ -137,7 +141,7 @@
   loop: "{{ java_keystore_new_certs }}"
   loop_control:
     index_var: loop_index
-  check_mode: yes
+  check_mode: true
   register: result_pw_change_check
 
 - name: Create a Java keystore for the given certificates (password changed)
@@ -160,7 +164,7 @@
   loop: "{{ java_keystore_new_certs }}"
   loop_control:
     index_var: loop_index
-  check_mode: yes
+  check_mode: true
   register: result_type_pkcs12_check
 
 - name: Create a Java keystore for the given certificates (force keystore type jks, check mode)
@@ -172,7 +176,7 @@
   loop: "{{ java_keystore_new_certs }}"
   loop_control:
     index_var: loop_index
-  check_mode: yes
+  check_mode: true
   register: result_type_jks_check
 
 - name: Create a Java keystore for the given certificates (force keystore type jks)
@@ -221,7 +225,7 @@
   loop: "{{ java_keystore_new_certs }}"
   loop_control:
     index_var: loop_index
-  check_mode: yes
+  check_mode: true
   register: result_type_change_check
 
 - name: Create a Java keystore for the given certificates (keystore type changed)
@@ -244,7 +248,7 @@
   loop: "{{ java_keystore_new_certs }}"
   loop_control:
     index_var: loop_index
-  check_mode: yes
+  check_mode: true
   register: result_type_omit_check
 
 - name: Create a Java keystore for the given certificates (omit keystore type)

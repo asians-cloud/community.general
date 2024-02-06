@@ -1,7 +1,12 @@
+..
+  Copyright (c) Ansible Project
+  GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+  SPDX-License-Identifier: GPL-3.0-or-later
+
 Dictionaries
 ^^^^^^^^^^^^
 
-You can use the ``dict_kv`` filter to create a single-entry dictionary with ``value | community.general.dict_kv(key)``:
+You can use the :ansplugin:`community.general.dict_kv filter <community.general.dict_kv#filter>` to create a single-entry dictionary with ``value | community.general.dict_kv(key)``:
 
 .. code-block:: yaml+jinja
 
@@ -53,7 +58,7 @@ This produces:
 
 .. versionadded:: 2.0.0
 
-If you need to convert a list of key-value pairs to a dictionary, you can use the ``dict`` function. Unfortunately, this function cannot be used with ``map``. For this, the ``community.general.dict`` filter can be used:
+If you need to convert a list of key-value pairs to a dictionary, you can use the ``dict`` function. Unfortunately, this function cannot be used with ``map``. For this, the :ansplugin:`community.general.dict filter <community.general.dict#filter>` can be used:
 
 .. code-block:: yaml+jinja
 

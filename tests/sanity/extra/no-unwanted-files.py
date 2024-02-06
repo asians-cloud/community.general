@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # Copyright (c) Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Prevent unwanted files from being added to the source tree."""
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 import os
+import os.path
 import sys
 
 
@@ -37,6 +39,11 @@ def main():
 
         if any(path.startswith(skip_directory) for skip_directory in skip_directories):
             continue
+
+        if os.path.islink(path):
+            print('%s: is a symbolic link' % (path, ))
+        elif not os.path.isfile(path):
+            print('%s: is not a regular file' % (path, ))
 
         ext = os.path.splitext(path)[1]
 
